@@ -1,0 +1,675 @@
+#Manager: Controla as telas do jogo
+
+Manager:
+	Menu:    			    #Criação da Tela 1:    'menu'
+		name:'menu'
+        
+	Game:    			    #Criação da Tela 2:    'game'
+		name: 'game' 
+        
+    GameOver:               #Criação da Tela 2.1:  'gameOver'
+        name: 'gameOver'    
+
+    SignUp:                 #Criação da Tela 2.2: 'signUp'
+        name: 'signUp'
+
+	Options: 			    #Criação da Tela 3:    'options'
+		name:'options'
+    
+    Characters:             #Criação da Tela 3.1:  'characters'
+        name: 'characters'
+		
+    Themes:                 #Criação da Tela 3.2:  'themes'
+        name: 'themes'
+         
+    Credits:                #Criação da Tela 3.3:  'credits
+        name: 'credits'
+
+    Ranking:                #Criação da Tela 4.1:    'ranking'
+        name: 'ranking'
+		
+<Menu>: 
+    #Retângulo para criação da Tela 1: 'menu'
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'Images/Menu/Menu_Inicio.jpg'
+                                   
+    #Configuração da Caixa que contém os botões (Play, Options, SignUp, Exit)
+    BoxLayout:
+        size_hint_y: None 
+        width: root.width
+        spacing: root.width*(4/100)
+        x: root.width*(4/100)
+        y: root.height*(8/100) 
+     
+        #Configuração do Botão 'Play'    
+        PlayButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(20/100),root.height/3.5
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'game'
+ 
+        #Configuração do Botão 'Options'
+        OptionsButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(20/100),root.height/3.5
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'options'
+                
+        #Configuração do Botão 'SignUp'
+        SignUpButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(20/100),root.height/3.5
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'signUp'
+                    
+        #Configuração do Botão 'Exit'
+        ExitButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(20/100),root.height/3.5       
+            on_press: root.leave()
+       
+    #Cria uma Caixa que contém 'Music' e 'CheckBox'
+    BoxLayout:
+        FloatLayout:
+            size_hint_y: None
+            height: root.height*(87/100)
+
+            #Label para o texto 'Music'
+            Label:
+                size_hint : (None, None)
+                height : root.height*(6/100)
+                width : root.height*(3/100)
+                text : 'Music'
+                font_size: '35px'
+                color: 0,0,1,10000
+                pos_hint : {'x': 0.06, 'y': 0.99887}
+			
+            #Cria o componente CheckBox
+            CheckBox :
+                id : check_som
+                active : True
+                size_hint : (None, None)
+                color: 1,0,1,1
+                pos_hint : {'x': 0.08, 'y': 0.96}
+                on_active: root.controla_som(check_som.active)
+
+<Game>:
+    #Retângulo para criação da Tela 2: 'game'
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'Images/Menu_Game/Tela_Inicial_Game.png'
+    
+    #Layout para o título (Score: 0, Player)
+    FloatLayout:        
+        #Label para criação do título 'Score: 0'
+        Label:
+            text: 'Score: '
+            font_size: root.height*(9.25/100)
+            bold: True
+            size_hint_y: None
+            height: self.font_size
+            y: root.height*0.9
+        Label:
+            text:
+            id:score
+            font_size: root.height*(9.25/100)
+            bold: True
+            size_hint_y: None
+            height: self.font_size
+            x: 150
+            y: root.height*0.9
+           
+        #Criação do Personagem
+        Player:
+            id:player
+            allow_stretch: True #Tamanho definido que nao depende da resolução
+            size_hint: None, None
+            size: 300, 400
+            x: 40
+            y: 400
+<GameOver>:
+    #Retângulo para criação da Tela 2.1: 'gameOver'
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'Images/Menu_Game/Tela_GameOver.png'
+    
+    #Configuração da Caixa que contém os botões (Back)
+    BoxLayout:
+        size_hint_y: None
+        spacing: root.width*(2/100)
+        width: root.width
+        x: root.width*(50/100)
+        y: root.height*(10.8/100) 
+      
+        #Configuração do Botão 'Back'
+        MenuButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(20/100),root.height/3.5
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'menu'
+   
+        SignUpButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(20/100),root.height/3.5
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'signUp'
+ 
+<SignUp>:
+    on_enter: root.on_enter()
+
+    #Retângulo para criação da Tela 2.2: 'signUp'
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'Images/Menu_SignUp/Menu_SignUp.jpg'
+                
+    #Configuração da tela de cadastro
+    BoxLayout: 
+        spacing: '1px'
+        padding: '3px'
+        pos_hint: {'x':0.5,'y':0.4}
+        
+    #Configuração de 'Nome:...'
+    BoxLayout:
+        spacing: '45px'
+        pos_hint: {'x':0.1,'y':0.60}
+        size_hint: (0.3,0.06)
+        Label:
+            size_hint: (None, None)
+            height: 80
+            width: 80
+            font_size: '50px'
+            text: 'Nome: '
+        TextInput:
+            pos_hint: {'x':0.05,'y':0.5}
+            id: n1
+            font_size: '30px'
+    
+    #Configuração de 'Email:...'
+    BoxLayout:
+        spacing: '45px'
+        pos_hint: {'x':0.1,'y':0.50}
+        size_hint: (0.3,0.06)
+        Label:
+            size_hint: (None, None)
+            height: 80
+            width: 80
+            font_size: '50px'
+            text: 'Email: '
+        TextInput:
+            pos_hint: {'x':0.05,'y':0.3}
+            id: n2
+            font_size: '30px'
+    
+    #Configuração de 'Rank:...'
+    BoxLayout:
+        spacing: '85px'
+        pos_hint: {'x':0.1,'y':0.40}
+        size_hint: (0.3,0.06)
+        Label:
+            size_hint: (None, None)
+            height: 80
+            width: 80
+            font_size: '50px'
+            text: 'Score:'
+            x : 10
+    
+    # Exibe o score do jogador
+        Label:
+            id: score
+            pos_hint: {'x':0.15,'y':0.2}
+            font_size: '30px'
+    
+    #Configuração do Botão 'Confirmar'
+    BoxLayout:
+        pos_hint: {'x':0.55,'y':0.35}
+        CheckButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(21.81/100),root.height/3.5
+            on_press:
+                root.Registrar()
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'ranking'
+                
+<Ranking>:
+    #Retângulo para criação da Tela 2.3: 'ranking'
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'Images/Menu_SignUp/Menu_Register.jpg'
+              
+    #Configuração da Caixa que contém os botões (Back)
+    BoxLayout:
+        size_hint_y: None
+        spacing: root.width*(2/100)
+        width: root.width
+        x: root.width*(40/100)
+        y: root.height*(5/100) 
+      
+        #Configuração do Botão 'Back'
+        MenuButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(20/100),root.height/3.5
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'menu'
+                
+<Options>:
+    #Retângulo para criação da Tela 3: 'options'
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'Images/Menu_Options/Menu_Options.jpg'
+    
+    #Configuração da Caixa que contém os botões (Characters, Themes, Credits)
+    BoxLayout:
+        size_hint_y: None 
+        width: root.width
+        spacing: root.width*(10/100)
+        x: root.width*(10/100)
+        y: root.height*(8/100) 
+     
+        #Configuração do Botão 'Characters'    
+        CharactersButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(20/100),root.height/3.5
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'characters'
+ 
+        #Configuração do Botão 'Themes'
+        ThemesButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(20/100),root.height/3.5
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'themes'
+            
+	    #Configuração do Botão 'Credits'
+        CreditsButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(20/100),root.height/3.5
+            on_press:
+                root.manager.transition.direction = 'up'
+                root.manager.current = 'credits'
+           
+    #Configuração da Caixa que contém o botão (Back)
+    BoxLayout:
+        width: root.width
+        height: root.height
+        x: root.width*0.005
+        y: root.height*0.895
+    
+        #Configuração do Botão 'Back' 
+        BackButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(10/100),root.height*(10/100)
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'menu'
+    
+<Characters>:
+    #Retângulo para criação da Tela 3.1: 'characters'
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'Images/Menu_Characters/Characters_screen.png'
+    
+    #Configuração da Caixa que contém o botão (Back)
+    BoxLayout:
+        width: root.width
+        height: root.height
+        x: root.width*0.005
+        y: root.height*0.895
+    
+        #Configuração do Botão 'Back'    
+        BackButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(10/100),root.height*(10/100)
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'options'
+   
+    #Linha superior de 'Characters'
+    BoxLayout: 
+        size_hint_y: None
+        width: root.width
+        spacing: root.width*(2.864583333/100)
+        x: root.width*(5.208333/100)
+        y: root.height*(44/100)
+    
+        #Configuração do Botão 'Character1Button'
+        Character1Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(15.625/100), root.height*(32.4074074/100)
+        
+        #Configuração do Botão 'Character2Button'        
+        Character2Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(15.625/100), root.height*(32.4074074/100)
+        
+        #Configuração do Botão 'Character3Button'        
+        Character3Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(15.625/100), root.height*(32.4074074/100)
+        
+        #Configuração do Botão 'Character4Button'        
+        Character4Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(15.625/100), root.height*(32.4074074/100)
+        
+        #Configuração do Botão 'Character5Button'        
+        Character5Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(15.625/100), root.height*(32.4074074/100)
+
+    #Linha inferior de 'Characters'
+    BoxLayout: 
+        size_hint_y: None
+        width: root.width
+        spacing: root.width*(2.864583333/100)
+        x: root.width*(5.208333/100)
+        y: root.height*(7/100)
+    
+        #Configuração do Botão 'Character6Button'
+        Character6Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(15.625/100), root.height*(32.4074074/100)
+
+        #Configuração do Botão 'Character7Button'
+        Character7Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(15.625/100), root.height*(32.4074074/100)
+
+        #Configuração do Botão 'Character8Button'
+        Character8Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(15.625/100), root.height*(32.4074074/100)
+        
+        #Configuração do Botão 'Character9Button'
+        Character9Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(15.625/100), root.height*(32.4074074/100)
+        
+        #Configuração do Botão 'Character10Button'
+        Character10Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(15.625/100), root.height*(32.4074074/100)    
+
+<Themes>:
+    #Retângulo para criação da Tela 3.2: 'themes'
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'Images/Menu_Themes/Menu_Themes.jpg'
+    
+    #Configuração da Caixa que contém o botão (Back)
+    BoxLayout:
+        width: root.width
+        height: root.height
+        x: root.width*0.005
+        y: root.height*0.895
+    
+        #Configuração do Botão 'Back'    
+        BackButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(10/100),root.height*(10/100)
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'options'
+
+    #Linha superior de 'Themes'
+    BoxLayout: 
+        size_hint_y: None
+        width: root.width
+        spacing: root.width*(4/100)
+        x: root.width*(21/100)
+        y: root.height*(45/100)
+    
+        #Configuração do Botão 'Theme1Button'
+        Theme1Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(27/100), root.height*(28/100)
+        
+        #Configuração do Botão 'Theme2Button'        
+        Theme2Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(27/100), root.height*(28/100)
+            
+    #Linha inferior de 'Themes'
+    BoxLayout: 
+        size_hint_y: None
+        width: root.width
+        spacing: root.width*(4/100)
+        x: root.width*(21/100)
+        y: root.height*(10/100)
+    
+        #Configuração do Botão 'Theme3Button'
+        Theme3Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(27/100), root.height*(28/100)
+        
+        #Configuração do Botão 'Theme4Button'        
+        Theme4Button:
+            border: 0,0,0,0
+            size_hint: (None, None)
+            on_release: app.root.current = 'menu'
+            size: root.width*(27/100), root.height*(28/100)
+
+<Credits>:
+    #Retângulo para criação da Tela 3.3: 'credits'
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'Images/Menu_Credits/Menu_Credits.jpg'
+    
+    #Configuração da Caixa que contém o botão (Back)
+    BoxLayout:
+        width: root.width
+        height: root.height
+        x: root.width*0.005
+        y: root.height*0.895
+    
+        #Configuração do Botão 'Back'    
+        BackButton:
+            border: 0,0,0,0
+            size_hint : (None, None)
+            size: root.width*(10/100),root.height*(10/100)
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'options'
+
+<Player>:
+    source:'Images/Menu_Game/t-rex.png'
+   
+<Obstacle>:
+    canvas:
+        Color:
+            rgba:self.color
+        Rectangle:
+            size: 100, 400
+            pos: self.pos
+
+   
+#Classificação de Objetos como sendo do tipo Botões
+<PlayButton@Button>:
+    background_normal: 'Widgets/Menu/play.png'
+    background_down: 'Widgets/Menu/play_pressed.png'
+    
+<MenuButton@Button>:
+    background_normal: 'Widgets/Menu_GameOver/Menu.png'
+    background_down: 'Widgets/Menu_GameOver/Menu_pressed.png'
+    
+<OptionsButton@Button>:
+    background_normal: 'Widgets/Menu/options.png'
+    background_down: 'Widgets/Menu/options_pressed.png'
+    
+<ExitButton@Button>:
+    background_normal: 'Widgets/Menu/exit.png'
+    background_down: 'Widgets/Menu/exit_pressed.png'
+    
+<SignUpButton@Button>:
+    background_normal: 'Widgets/Menu/SignUp.png'
+    background_down: 'Widgets/Menu/SignUp_pressed.png'
+    
+<CheckButton@Button>:
+    background_normal: 'Widgets/Menu/play.png'
+    background_down: 'Widgets/Menu/play_pressed.png'
+    
+<CharactersButton@Button>:
+    background_normal: 'Widgets/Menu_Options/characters.png'
+    background_down: 'Widgets/Menu_Options/characters_pressed.png'
+
+<ThemesButton@Button>:
+    background_normal: 'Widgets/Menu_Options/themes.png'
+    background_down: 'Widgets/Menu_Options/themes_pressed.png'
+    
+<Theme1Button@Button>:
+    background_normal: 'Images/Menu_Themes/Theme1.jpg'
+    background_down: 'Images/Menu_Themes/Theme1_pressed.jpg'
+    
+<Theme2Button@Button>:
+    background_normal: 'Images/Menu_Themes/Theme2.jpg'
+    background_down: 'Images/Menu_Themes/Theme2_pressed.jpg'
+    
+<Theme3Button@Button>:
+    background_normal: 'Images/Menu_Themes/Theme3.jpg'
+    background_down: 'Images/Menu_Themes/Theme3_pressed.jpg'
+    
+<Theme4Button@Button>:
+    background_normal: 'Images/Menu_Themes/Theme4.jpg'
+    background_down: 'Images/Menu_Themes/Theme4_pressed.jpg'
+
+<CreditsButton@Button>:
+    background_normal: 'Widgets/Menu_Options/credits.png'
+    background_down: 'Widgets/Menu_Options/credits_pressed.png'    
+
+<BackButton@Button>:
+    background_normal: 'Widgets/Back_Button/back.png'
+    background_down: 'Widgets/Back_Button/back_pressed.png'
+     
+<Character1Button@Button>:
+    background_normal: 'Images/Menu_Characters/t-rex.png'
+    background_down: 'Images/Menu_Characters/t-rex_pressed.png'
+    
+<Character2Button@Button>:
+    background_normal: 'Images/Menu_Characters/triceratops.png'
+    background_down: 'Images/Menu_Characters/triceratops_pressed.png'
+    
+<Character3Button@Button>:
+    background_normal: 'Images/Menu_Characters/brachiosaurus.png'
+    background_down: 'Images/Menu_Characters/brachiosaurus_pressed.png'
+    
+<Character4Button@Button>:
+    background_normal: 'Images/Menu_Characters/velociraptor.png'
+    background_down: 'Images/Menu_Characters/velociraptor_pressed.png'
+        
+<Character5Button@Button>:
+    background_normal: 'Images/Menu_Characters/fossil.png'   
+    background_down: 'Images/Menu_Characters/fossil_pressed.png'   
+
+<Character6Button@Button>:
+    background_normal: 'Images/Menu_Characters/stickman.jpg'
+    background_down: 'Images/Menu_Characters/stickman_pressed.jpg'   
+    
+<Character7Button@Button>:
+    background_normal: 'Images/Menu_Characters/yoki.jpg'
+    background_down: 'Images/Menu_Characters/yoki_pressed.jpg'
+   
+<Character8Button@Button>:
+    background_normal: 'Images/Menu_Characters/raxip.png'
+    background_down: 'Images/Menu_Characters/raxip_pressed.png'
+          
+<Character9Button@Button>:
+    background_normal: 'Images/Menu_Characters/Speedle42.png'
+    background_down: 'Images/Menu_Characters/Speedle42_pressed.png'
+      
+<Character10Button@Button>:
+    background_normal: 'Images/Menu_Characters/offline.jpg'
+    background_down: 'Images/Menu_Characters/offline_pressed.jpg'
+  
