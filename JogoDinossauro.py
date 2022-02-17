@@ -36,7 +36,7 @@ class Menu(Screen): #Classe para controle da tela 'Menu'
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.som_menu = SoundLoader.load('Audio/Menu/Musica_de_Fundo.mp3')
-        self.som_menu_volume = 0 #Mudar para 0.05
+        self.som_menu_volume = 0.05
         self.som_menu.play()
         self.som_menu.loop = True
 
